@@ -1,28 +1,49 @@
 const express = require('express');
 const app = express();
+const cookieParser = require('cookie-parser')
+const bodyParser = require("body-parser");
+
 const port = 8080;
+const {auth, dbTool} = require("./libs/dbLib");
 
-const mongoClient = require("mongodb").MongoClient;
-const dbUrl = "mongodb://localhost:27017/";
+const sessions = {};
 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use("/public", express.static(__dirname + "/views/public"));
 app.set("view engine", "ejs");
 
-app.get('/api', (request, response) => {
-    mongoClient.connect(dbUrl, (err, client) => {
-      
-        const db = client.db("local");
-        const result = {status: 1};
-        
-        if(err){
-            result.status = 0;
+app.post("/auth", (req, res) => {
+    auth(req.body.login, req.body.pass).then(key => {
+        if(key){
+            const sessionId = Math.random().toString(36).substring(3);
+
+            sessions[sessionId] = key;
+            res.cookie('session', sessionId, { maxAge: 900000 });
         }
 
-        response.send(result);
+        res.redirect('/');
     });
 });
 
-app.get('/', (request, response) => {
-    response.render("main", {
+app.get('/api/:method', (req, res) => {
+    const reqSession = req.cookies.session;
+
+    if(reqSession && sessions[reqSession]){
+        dbTool(req.params.method, sessions[reqSession], req.query).then(result => {
+            res.json(result);
+        }).catch(err => {
+            console.error(err.message);
+
+            res.sendStatus(err.status);
+        });
+    }else{
+        res.sendStatus(403);
+    }
+});
+
+app.get('/', (req, res) => {
+    res.render("main", {
         title: "ShopStats",
         text: "Welcome!"
     });
