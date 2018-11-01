@@ -43,10 +43,16 @@ app.get('/api/:method', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-    res.render("main", {
-        title: "ShopStats",
-        text: "Welcome!"
-    });
+    const reqSession = req.cookies.session;
+
+    if(reqSession && sessions[reqSession]){
+        res.render("main", {
+            title: "ShopStats",
+            text: "Welcome!"
+        });
+    }else{
+        res.render("login");
+    }
 });
 
 app.listen(port, (err) => {
