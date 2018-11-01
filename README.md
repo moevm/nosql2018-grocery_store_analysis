@@ -1,8 +1,6 @@
-# Installation
+# Run
 ```
-npm install express
-npm install ejs
-npm install mongodb
+node server.js
 ```
 # Import data to MongoDB
 ```
