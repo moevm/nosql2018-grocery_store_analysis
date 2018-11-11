@@ -1,0 +1,263 @@
+body {
+    font-family: "Roboto", sans-serif;
+    position: relative;
+}
+
+#wrapper {
+    width: 100%;
+    margin-top: 50px;
+}
+
+#page-wrapper {
+    padding: 15px 15px;
+    min-height: 654px;
+    background: #F3F3F3;
+    position: relative;
+}
+
+.page-inner {
+    display: none;
+    width: 100%;
+    margin: 10px 20px 10px 0px;
+    background-color: #fff !important;
+    padding: 10px;
+    min-height: 600px;
+}
+
+.pad-top {
+    padding-top: 15px;
+}
+
+.sidebar-collapse .nav {
+    padding: 0;
+    padding-top: 20px;
+}
+
+.sidebar-collapse>.nav>li>a {
+    cursor: pointer;
+    padding: 15px 10px;
+    color: #214761;
+    font-weight: 900;
+    font-size: 16px;
+}
+
+.sidebar-collapse>.nav>li {
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.sidebar-collapse .nav>li>a:hover,
+.sidebar-collapse .nav>li>a:focus {
+
+    background: #F3F3F3;
+    outline: 0;
+}
+
+.navbar-side {
+    border: none;
+    background-color: #fff;
+
+}
+
+.navbar-inverse {
+
+    background-color: #214761;
+    border-color: #F0F0F0;
+    min-height: 70px;
+}
+
+
+.nav>li>a>i {
+    margin-right: 10px;
+}
+
+.logout-spn {
+    float: right;
+    color: #fff;
+    font-size: 25px;
+    font-weight: 800;
+    display: inline-block;
+    line-height: 70px;
+    margin: 0 10px;
+}
+
+.logout-spn a {
+    text-decoration: none;
+}
+
+.navbar-brand{
+    height: 70px;
+    padding: 10px 0;
+    margin-left: 10px;
+}
+
+.active-link {
+    background-color: #f3f3f3;
+}
+
+.div-square {
+    padding: 5px;
+    border: 3px double #e1e1e1;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    margin: 5px;
+
+}
+
+.div-square>a,
+.div-square>a:hover {
+    color: #808080;
+    text-decoration: none;
+}
+
+.row{
+    margin: 0;
+    position: relative;
+}
+
+.panel-footer:empty{
+    display: none
+}
+
+.footer {
+    background-color: #214761;
+    width: 100%;
+    color: #fff;
+    padding: 20px 50px 20px 50px;
+    padding-left: 20px;
+}
+
+
+.footer>a,
+.footer>a:hover {
+
+    color: #fff;
+}
+
+@media(min-width:768px) {
+    #page-wrapper {
+        margin: 0 0 0 260px;
+        padding: 15px 30px;
+    }
+
+
+    .navbar-side {
+        z-index: 1;
+        position: absolute;
+        width: 260px;
+
+    }
+
+
+}
+
+/* LOADER */
+.lds-roller {
+    z-index: 999;
+    display: inline-block;
+    width: 64px;
+    height: 64px;
+    transform: scale(3) translateX(-50%);
+    position: absolute;
+    top: 200px;
+    left: 50%;
+}
+
+.lds-roller div {
+    animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    transform-origin: 32px 32px;
+}
+
+.lds-roller div:after {
+    content: " ";
+    display: block;
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #214761;
+    margin: -3px 0 0 -3px;
+}
+
+.lds-roller div:nth-child(1) {
+    animation-delay: -0.036s;
+}
+
+.lds-roller div:nth-child(1):after {
+    top: 50px;
+    left: 50px;
+}
+
+.lds-roller div:nth-child(2) {
+    animation-delay: -0.072s;
+}
+
+.lds-roller div:nth-child(2):after {
+    top: 54px;
+    left: 45px;
+}
+
+.lds-roller div:nth-child(3) {
+    animation-delay: -0.108s;
+}
+
+.lds-roller div:nth-child(3):after {
+    top: 57px;
+    left: 39px;
+}
+
+.lds-roller div:nth-child(4) {
+    animation-delay: -0.144s;
+}
+
+.lds-roller div:nth-child(4):after {
+    top: 58px;
+    left: 32px;
+}
+
+.lds-roller div:nth-child(5) {
+    animation-delay: -0.18s;
+}
+
+.lds-roller div:nth-child(5):after {
+    top: 57px;
+    left: 25px;
+}
+
+.lds-roller div:nth-child(6) {
+    animation-delay: -0.216s;
+}
+
+.lds-roller div:nth-child(6):after {
+    top: 54px;
+    left: 19px;
+}
+
+.lds-roller div:nth-child(7) {
+    animation-delay: -0.252s;
+}
+
+.lds-roller div:nth-child(7):after {
+    top: 50px;
+    left: 14px;
+}
+
+.lds-roller div:nth-child(8) {
+    animation-delay: -0.288s;
+}
+
+.lds-roller div:nth-child(8):after {
+    top: 45px;
+    left: 10px;
+}
+
+@keyframes lds-roller {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+  

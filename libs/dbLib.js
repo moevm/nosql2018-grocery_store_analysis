@@ -11,8 +11,15 @@ mongoClient.connect(config.dbUrl, (err, client) => {
 
 const auth = async function(login, password){
     return new Promise(resolve => {
-        collection.findOne({"admin.login": login, "admin.pass": md5(password)}, {"key":1}).then(shop => {        
-            resolve(shop ? shop["key"] : null);
+        collection.findOne({"admin.login": login, "admin.pass": md5(password)}, {"key":1, "admin.login":1}).then(shop => { 
+            if(shop){
+                resolve({
+                    name: shop.admin.login,
+                    key: shop.key
+                });
+            }else{
+                resolve(false);
+            }
         });
     });
 };

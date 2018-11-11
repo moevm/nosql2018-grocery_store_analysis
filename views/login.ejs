@@ -1,14 +1,32 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Login</title>
-    <meta charset="utf-8" />
 
-    <script src="public/js/jquery-3.3.1.min.js"></script>
+<head>
+  <title>Login</title>
+  <meta charset="utf-8" />
+
+  <link rel="stylesheet" media="all" href="public/css/login.css" />
+  <script src="public/js/jquery-3.3.1.min.js"></script>
 </head>
+
 <body>
-     
-    <h1>Login please</h1>
-     
+  <div class="login-page">
+    <div class="form">
+      <form class="login-form" method="POST" action="/auth">
+        <input type="text" placeholder="Логин" name="login" required />
+        <input type="password" placeholder="Пароль" name="pass" required />
+        <span id="bad">Неверный логин или пароль</span>
+        <button>Войти</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const query = document.location.search.replace(/(^\?)/,'').split("&").map(function(n){return n = n.split("="),this[n[0]] = n[1],this}.bind({}))[0];
+
+    if(query["bad-auth"]){
+      $("#bad").css("display", "inline-block");
+    }
+  </script>
 </body>
 <html>

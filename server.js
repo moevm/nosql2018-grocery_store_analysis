@@ -14,15 +14,19 @@ app.use("/public", express.static(__dirname + "/views/public"));
 app.set("view engine", "ejs");
 
 app.post("/auth", (req, res) => {
-    auth(req.body.login, req.body.pass).then(key => {
-        if(key){
+    auth(req.body.login, req.body.pass).then(data => {
+        if(data){
             const sessionId = Math.random().toString(36).substring(3);
 
-            sessions[sessionId] = key;
+            sessions[sessionId] = data.key;
             res.cookie('session', sessionId, { maxAge: 900000 });
+            res.cookie('name', data.name, { maxAge: 900000 });
+
+            res.redirect('/');
+        }else{
+            res.redirect('/?bad-auth=1');
         }
 
-        res.redirect('/');
     });
 });
 
@@ -48,11 +52,22 @@ app.get('/', (req, res) => {
     if(reqSession && sessions[reqSession]){
         res.render("main", {
             title: "ShopStats",
-            text: "Welcome!"
+            name: req.cookies.name
         });
     }else{
         res.render("login");
     }
+});
+
+
+app.get('/logout', (req, res) => {
+    const reqSession = req.cookies.session;
+
+    if(reqSession && sessions[reqSession]){
+        delete sessions[reqSession];
+    }
+
+    res.redirect('/');
 });
 
 app.listen(port, (err) => {
