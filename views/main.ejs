@@ -8,7 +8,13 @@
         <%=title %>
     </title>
 
+    <script src="public/js/jquery-3.3.1.min.js"></script>
+    <script src="public/js/moment.min.js"></script>
+    <script src="public/js/daterangepicker.js"></script>
+    <script src="https://code.highcharts.com/highcharts.src.js"></script>
+
     <link href="public/css/bootstrap.css" rel="stylesheet" />
+    <link href="public/css/daterangepicker.css" rel="stylesheet" />
     <link href="public/css/font-awesome.css" rel="stylesheet" />
     <link href="public/css/custom.css" rel="stylesheet" />
 
@@ -43,11 +49,11 @@
                 <ul class="nav" id="main-menu">
 
                     <li class="active-link">
-                        <a><i class="fa fa-home"></i>Главная</a>
+                        <a data-block="main"><i class="fa fa-home"></i>Главная</a>
                     </li>
 
                     <li>
-                        <a><i class="fa fa-bar-chart-o"></i>Отчёты</a>
+                        <a data-block="stats"><i class="fa fa-bar-chart-o"></i>Отчёты</a>
                     </li>
                     <li>
                         <a><i class="fa fa-users"></i>Пользователи</a>
@@ -90,6 +96,107 @@
                 </div>
             </div>
 
+            <div class="page-inner" id="stats">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2 id="page-name">Отчёты</h2>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="date">
+                        <input type="text" name="daterange" value="09/01/2018 - 09/30/2018" />
+                        <a class="btn btn-success" id="get-stats">Применить</a>
+                    </div>
+
+                    <div class="col-lg-4 col-md-4">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                Посещаемость сайта
+                            </div>
+                            <div class="panel-body">
+                                <div class="lds-ellipsis chart-load"><div></div><div></div><div></div><div></div></div>
+                                <div class="chart" id="traffic"></div>
+                            </div>
+                            <div class="panel-footer"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-4">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                Конверсия
+                            </div>
+                            <div class="panel-body">
+                                <div class="lds-ellipsis chart-load"><div></div><div></div><div></div><div></div></div>
+                                <div class="chart" id="conv"></div>
+                            </div>
+                            <div class="panel-footer"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-4">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                Выручка с сайта
+                            </div>
+                            <div class="panel-body">
+                                <div class="lds-ellipsis chart-load"><div></div><div></div><div></div><div></div></div>
+                                <div class="chart" id="revenue"></div>
+                            </div>
+                            <div class="panel-footer">
+                                Выручка за период: <span id="revenue-sum"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-4">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                Средняя стоимость товара
+                            </div>
+                            <div class="panel-body">
+                                <div class="lds-ellipsis chart-load"><div></div><div></div><div></div><div></div></div>
+                                <div class="chart" id="acost"></div>
+                            </div>
+                            <div class="panel-footer">
+                                Средняя стоимость: <span id="acost-sum"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-4">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                ARPU
+                            </div>
+                            <div class="panel-body">
+                                <div class="lds-ellipsis chart-load"><div></div><div></div><div></div><div></div></div>
+                                <div class="chart" id="arpu"></div>
+                            </div>
+                            <div class="panel-footer">
+                                С клиента: <span id="arpu-sum"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-4">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                ARPPU
+                            </div>
+                            <div class="panel-body">
+                                <div class="lds-ellipsis chart-load"><div></div><div></div><div></div><div></div></div>
+                                <div class="chart" id="arppu"></div>
+                            </div>
+                            <div class="panel-footer">
+                                Средний чек: <span id="arppu-sum"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
         </div>
 
@@ -102,10 +209,7 @@
         </div>
     </div>
 
-    <script src="public/js/jquery-3.3.1.min.js"></script>
-    <script src="public/js/bootstrap.min.js"></script>
     <script src="public/js/custom.js"></script>
-
 </body>
 
 </html>

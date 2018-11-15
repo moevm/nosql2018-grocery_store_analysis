@@ -19,8 +19,8 @@ app.post("/auth", (req, res) => {
             const sessionId = Math.random().toString(36).substring(3);
 
             sessions[sessionId] = data.key;
-            res.cookie('session', sessionId, { maxAge: 900000 });
-            res.cookie('name', data.name, { maxAge: 900000 });
+            res.cookie('session', sessionId, { maxAge: 24 * 60 * 60 * 1000 });
+            res.cookie('name', data.name, { maxAge: 24 * 60 * 60 * 1000 });
 
             res.redirect('/');
         }else{
