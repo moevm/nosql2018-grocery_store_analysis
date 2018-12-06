@@ -170,15 +170,82 @@ input[name="daterange"] {
         padding: 15px 30px;
     }
 
-
     .navbar-side {
         z-index: 1;
         position: absolute;
         width: 260px;
 
     }
+}
 
+#users table,
+#orders #o-block table {
+    table-layout: fixed;
+}
 
+.tablesorter tr th[aria-sort="descending"] :last-child::after {
+    content: "▲";
+    font-size: 10px;
+    padding-left: 4px;
+}
+
+.tablesorter tr th[aria-sort="ascending"] :last-child::after {
+    content: "▼";
+    font-size: 10px;
+    padding-left: 4px;
+}
+
+/* pager wrapper, div */
+.tablesorter-pager {
+    padding: 5px;
+    text-align: center;
+}
+
+/* pager wrapper, in thead/tfoot */
+td.tablesorter-pager {
+    background-color: #e6eeee;
+    margin: 0;
+    /* needed for bootstrap .pager gets a 18px bottom margin */
+}
+
+/* pager navigation arrows */
+.tablesorter-pager img {
+    vertical-align: middle;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+/* pager output text */
+.tablesorter-pager .pagedisplay {
+    padding: 0 5px 0 5px;
+    width: 50px;
+    text-align: center;
+}
+
+/* pager element reset (needed for bootstrap) */
+.tablesorter-pager select {
+    margin: 0;
+    padding: 0;
+}
+
+/*** css used when "updateArrows" option is true ***/
+/* the pager itself gets a disabled class when the number of rows is less than the size */
+.tablesorter-pager.disabled {
+    display: none;
+}
+
+/* hide or fade out pager arrows when the first or last row is visible */
+.tablesorter-pager .disabled {
+    /* visibility: hidden */
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+    cursor: default;
+}
+
+.bad-robot {
+    display: block;
+    margin: 30px auto;
+    width: 500px;
 }
 
 /* LOADER */

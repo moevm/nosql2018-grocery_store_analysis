@@ -3,9 +3,11 @@ const mongoClient = require("mongodb").MongoClient;
 const md5 = require('md5');
 
 const shops = [];
+let collection;
 
 mongoClient.connect(config.dbUrl, (err, client) => {
     const db = client.db("local");
+    collection = db.collection(config.collection);
     
     db.collection(config.collection).find().forEach(item => {
         if(item == null) {
@@ -36,6 +38,25 @@ const auth = async function(login, password){
     });
 };
 
+const dbImport = async function (doc) {
+    return new Promise(resolve => {
+        collection.insertOne(doc, function (err, res) {
+            if (err) throw err;
+
+            shops.push(doc);
+
+            console.log("[DB] 1 document inserted");
+            resolve();
+        });
+    });
+};
+
+const dbExport = async function (key) {
+    return new Promise(resolve => {
+        resolve( shops.find(s => s.key === key ) || {} );
+    });
+};
+
 const dbTool = async function(method, key, params){
     return new Promise((resolve, reject) => {
         switch (method) {
@@ -59,6 +80,14 @@ const dbTool = async function(method, key, params){
                 break;
             case "apay":
                 getAverageRevenuePerPayingUser(key, params.from, params.to).then(result => { resolve(result) });
+                break;
+
+            case "users":
+                getUsers(key).then(result => { resolve(result) });
+                break;
+                
+            case "orders":
+                getOrders(key, params.from, params.to).then(result => { resolve(result) });
                 break;
         
             default:
@@ -355,7 +384,77 @@ const getAverageRevenuePerPayingUser = async function (key, from, to) {
     });
 };
 
-module.exports = {
-    auth: auth, 
-    dbTool: dbTool
+const getUsers = async function (key) {
+    return new Promise(resolve => {
+        const shop = shops.find(s => (
+            s.key === key
+        ));
+
+        const users = [];
+        shop.sessions.forEach(session => {
+            const uid = session.uid;
+            const userIndex = users.findIndex(u => u.uid === uid);
+
+            if( userIndex !== -1 ){
+                users[userIndex].visits += session.targets.length;
+                users[userIndex].revenue += session.targets.filter(t => t.type === "Покупка").length;
+                users[userIndex].offers += session.targets.filter(t => t.type === "Покупка").reduce((a, b) => (a.offers ? a.offers.length : 0) + (b.offers ? b.offers.length : 0), 0);
+                if (!users[userIndex].contacts ) {
+                    users[userIndex].contacts = [];
+                }
+
+                session.targets.filter(t => t.type === "Покупка").forEach(t => users[userIndex].contacts.push(t.delivery.email));
+            } else {
+                users.push({
+                    uid: session.uid,
+                    visits: session.targets.length,
+                    revenue: session.targets.filter(t => t.type === "Покупка").length,
+                    offers: session.targets.filter(t => t.type === "Покупка").reduce((a, b) => (a.offers ? a.offers.length : 0) + (b.offers ? b.offers.length : 0), 0),
+                    contacts: session.targets.filter(t => t.type === "Покупка").map(t => t.delivery.email)
+                });
+            }
+        });
+
+        resolve(users);
+    });
 }
+
+const getOrders = async function (key, from, to) {
+    return new Promise(resolve => {
+        const shop = shops.find(s => (
+            s.key === key
+        ));
+
+        if (shop && from && to) {
+            const fromFilter = new Date(from).getTime();
+            const toFilter = new Date(to).getTime() + 23*59*59*1000;
+
+            const offers = shop.offers;
+            const orders = [];
+            
+            shop.sessions.filter(session => (
+                new Date(session['session_start']).getTime() > fromFilter && new Date(session['session_end']).getTime() < toFilter
+            )).forEach(session => {
+                session.targets.filter(t => t.type === "Покупка").forEach(target => {
+                    let check = 0;
+                    offers.filter(o => target.offers.indexOf(o.id) !== -1).forEach(o => {
+                        check += parseInt(o.price);
+                    });
+
+                    orders.push({
+                        date: new Date(target.date).toLocaleString(),
+                        uid: session.uid,
+                        offers: offers.filter(o => target.offers.indexOf(o.id) !== -1).map(o => o.name),
+                        check
+                    });
+                });
+            });
+
+            resolve(orders);
+        } else {
+            resolve([]);
+        }
+    });
+}
+
+module.exports = { auth, dbTool, dbImport, dbExport }

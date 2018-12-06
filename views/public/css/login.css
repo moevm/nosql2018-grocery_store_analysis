@@ -101,3 +101,15 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;      
 }
+
+input[name='file'] {
+  display: none;
+}
+
+#import {
+  display: block;
+  margin-top: 20px;
+  text-decoration: none;
+  color: #0087d1;
+  font-weight: bolder;
+}

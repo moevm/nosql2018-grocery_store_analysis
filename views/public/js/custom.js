@@ -48,7 +48,7 @@
             let to = "2018-09-30";
             getStats(from, to);
             
-            $('input[name="daterange"]').daterangepicker({}, function(start, end){
+            $('#stats input[name="daterange"]').daterangepicker({}, function(start, end){
                 from = start.format('YYYY-MM-DD');
                 to = end.format('YYYY-MM-DD')
             });
@@ -323,6 +323,90 @@
             }
         },
 
+        pageUsers: function() {
+            $(".page-inner").hide();
+            mainApp.showLoader();
+
+            $.get("/api/users", function(data){
+                $("#users #u-block").empty().append('<table class="table table-striped table-bordered table-hover"><thead><tr><th width="35">#</th><th>uID</th><th>Визитов</th><th>Покупок</th><th>Куплено товаров</th><th width="450">Контакты</th></tr></thead><tbody></tbody></table><div id="pager" class="tablesorter-pager"><img src="public/img/left2.png" class="first"/><img src="public/img/left.png" class="prev"/><img src="public/img/right.png" class="next"/><img src="public/img/right2.png" class="last"/><select class="pagesize"><option value="10">10</option><option value="20">20</option><option value="50">50</option><option value="40">100</option><option value="all">Все</option></select></div>');
+
+                data.forEach((user, i) => {
+                    $("#users #u-block table tbody").append(`<tr><td>${i+1}</td><td>${user.uid}</td><td>${user.visits}</td><td>${user.revenue}</td><td>${user.offers}</td><td>${user.contacts.join(", ")}</td></tr>`);
+                });
+
+                $("#users #u-block table").tablesorter({
+                    widgets: ['zebra', 'columns', 'filter']
+                }).tablesorterPager({
+                    container: $("#pager"),
+                    page: 0,
+                    size: 10,
+                    cssNext: '.next', // next page arrow
+                    cssPrev: '.prev', // previous page arrow
+                    cssFirst: '.first', // go to first page arrow
+                    cssLast: '.last', // go to last page arrow
+                    cssGoto: '.gotoPage', // select dropdown to allow choosing a page
+
+                    cssPageDisplay: '.pagedisplay', // location of where the "output" is displayed
+                    cssPageSize: '.pagesize', // page size selector - select dropdown that sets the "size" option
+                });
+
+                mainApp.hideLoader(function(){
+                    $("#users").fadeIn(300);
+                });
+            });
+        },
+
+        pageOrders: function() {
+            mainApp.hideLoader();
+            $(".page-inner").hide();
+            $("#orders").fadeIn(300);
+            
+            let from = "2018-09-01";
+            let to = "2018-09-30";
+            getOrders(from, to);
+            
+            $('#orders input[name="daterange"]').daterangepicker({}, function(start, end){
+                from = start.format('YYYY-MM-DD');
+                to = end.format('YYYY-MM-DD')
+            });
+
+            $("#get-orders").click(function(){
+                getOrders(from, to);
+            });
+
+            function getOrders(_from, _to){
+                $.get("/api/orders?from=" + _from + "&to=" + _to, function(data){
+                    $("#orders #o-block").empty().append('<table class="table table-striped table-bordered table-hover"><thead><tr><th width="35">#</th><th>Дата</th><th width="300">Пользователь</th><th width="300">Товары</th><th>Итоговый чек</th></tr></thead><tbody></tbody></table><div id="pager2" class="tablesorter-pager"><img src="public/img/left2.png" class="first"/><img src="public/img/left.png" class="prev"/><img src="public/img/right.png" class="next"/><img src="public/img/right2.png" class="last"/><select class="pagesize"><option value="10">10</option><option value="20">20</option><option value="50">50</option><option value="40">100</option><option value="all">Все</option></select></div>');
+    
+                    data.forEach((order, i) => {
+                        $("#orders #o-block table tbody").append(`<tr><td>${i+1}</td><td>${order.date}</td><td>${order.uid}</td><td>${order.offers.join(", ")}</td><td>${order.check} р.</td></tr>`);
+                    });
+    
+                    $("#orders #o-block table").tablesorter({
+                        widgets: ['zebra', 'columns', 'filter']
+                    }).tablesorterPager({
+                        container: $("#pager2"),
+                        page: 0,
+                        size: 10,
+                        cssNext: '.next', // next page arrow
+                        cssPrev: '.prev', // previous page arrow
+                        cssFirst: '.first', // go to first page arrow
+                        cssLast: '.last', // go to last page arrow
+                        cssGoto: '.gotoPage', // select dropdown to allow choosing a page
+    
+                        cssPageDisplay: '.pagedisplay', // location of where the "output" is displayed
+                        cssPageSize: '.pagesize', // page size selector - select dropdown that sets the "size" option
+                    })
+                });
+            }
+        },
+
+        pageReviews: function() {
+            mainApp.hideLoader();
+            $(".page-inner").hide();
+            $("#reviews").fadeIn(300);
+        }
+
     }
 
     $(document).ready(function () {
@@ -338,6 +422,15 @@
                     break;
                 case "stats":
                     mainApp.pageStats();
+                    break;
+                case "users":
+                    mainApp.pageUsers();
+                    break;
+                case "orders":
+                    mainApp.pageOrders();
+                    break;
+                case "reviews":
+                    mainApp.pageReviews();
                     break;
 
                 default:

@@ -9,8 +9,11 @@
     </title>
 
     <script src="public/js/jquery-3.3.1.min.js"></script>
+    <script src="public/js/bootstrap.min.js"></script>
     <script src="public/js/moment.min.js"></script>
     <script src="public/js/daterangepicker.js"></script>
+    <script src="public/js/jquery.tablesorter.min.js"></script>
+    <script src="public/js/jquery.tablesorter.pager.js"></script>
     <script src="https://code.highcharts.com/highcharts.src.js"></script>
 
     <link href="public/css/bootstrap.css" rel="stylesheet" />
@@ -56,14 +59,14 @@
                         <a data-block="stats"><i class="fa fa-bar-chart-o"></i>Отчёты</a>
                     </li>
                     <li>
-                        <a><i class="fa fa-users"></i>Пользователи</a>
+                        <a data-block="users"><i class="fa fa-users"></i>Пользователи</a>
                     </li>
 
                     <li>
-                        <a href="#"><i class="fa fa-shopping-cart"></i>Заказы</a>
+                        <a data-block="orders"><i class="fa fa-shopping-cart"></i>Заказы</a>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-comment"></i>Отзывы</a>
+                        <a data-block="reviews"><i class="fa fa-comment"></i>Отзывы</a>
                     </li>
                     
                     <li>
@@ -93,6 +96,8 @@
                             <div class="panel-footer"></div>
                         </div>
                     </div>
+
+                    <a href="/export" target="_blank" class="btn btn-info" style="margin-left: 15px"><i class="fa fa-save"></i> Экспорт базы</a>
                 </div>
             </div>
 
@@ -195,6 +200,38 @@
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div class="page-inner" id="users">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2 id="page-name">Пользователи</h2>
+                    </div>
+                </div>
+                <hr />
+                <div class="row" id="u-block"></div>
+            </div>
+
+            <div class="page-inner" id="orders">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2 id="page-name">Заказы</h2>
+                    </div>
+                </div>
+                <hr />
+                
+                <div class="row">
+                    <div class="date">
+                        <input type="text" name="daterange" value="09/01/2018 - 09/30/2018" />
+                        <a class="btn btn-success" id="get-orders">Применить</a>
+                    </div>
+
+                    <div id="o-block"></div>
+                </div>
+            </div>
+
+            <div class="page-inner" id="reviews">
+                <img class="bad-robot" src="public/img/robot.jpg" />
             </div>
 
             <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>

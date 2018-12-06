@@ -2,13 +2,15 @@ const express = require('express');
 const app = express();
 const cookieParser = require('cookie-parser')
 const bodyParser = require("body-parser");
+const upload = require("express-fileupload");
 
 const port = 8080;
-const {auth, dbTool} = require("./libs/dbLib");
+const {auth, dbTool, dbImport, dbExport} = require("./libs/dbLib");
 
 const sessions = {};
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(upload());
 app.use(cookieParser());
 app.use("/public", express.static(__dirname + "/views/public"));
 app.set("view engine", "ejs");
@@ -28,6 +30,25 @@ app.post("/auth", (req, res) => {
         }
 
     });
+});
+
+app.post("/import", (req, res) => {
+    const file = req.files.json;
+    const doc = JSON.parse(file.data.toString('utf-8'));
+    
+    dbImport(doc).then(() => {
+        res.sendStatus(200);
+    });
+});
+
+app.get("/export", (req, res) => {
+    const reqSession = req.cookies.session;
+
+    if(reqSession && sessions[reqSession]){
+        dbExport(sessions[reqSession]).then(json => {
+            res.send(json);
+        });
+    }
 });
 
 app.get('/api/:method', (req, res) => {

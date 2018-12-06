@@ -18,6 +18,9 @@
         <span id="bad">Неверный логин или пароль</span>
         <button>Войти</button>
       </form>
+
+      <input name="file" type="file" id="input-file">
+      <a href="#" id="import">Импортировать базу</a>
     </div>
   </div>
 
@@ -27,6 +30,27 @@
     if(query["bad-auth"]){
       $("#bad").css("display", "inline-block");
     }
+
+    $("#import").click(function(){
+      $("input[name='file']").click();
+    });
+
+    $("input[name='file']").change(function(){
+      let fd = new FormData;
+
+      fd.append('json', $(this).prop('files')[0]);
+
+      $.ajax({
+        url: '/import',
+        data: fd,
+        processData: false,
+        contentType: false,
+        type: 'POST',
+        success: function(){
+          alert("База импортирована");
+        }
+      });
+    });
   </script>
 </body>
 <html>
