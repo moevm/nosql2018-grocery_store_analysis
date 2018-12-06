@@ -1,7 +1,7 @@
 # Install and run
 ```
-npm install pm2 -g
-pm2 start app.js
+npm install
+node server.js
 ```
 # Import data to MongoDB
 ```
